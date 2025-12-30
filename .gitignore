@@ -1,2 +1,4 @@
 *.zip
-course_19
+course_19/*
+!coourse_19/
+!course_19/Microservices.pptx
