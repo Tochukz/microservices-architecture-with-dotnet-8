@@ -6,6 +6,8 @@
 
 ## Related resources
 [Dotnet Mastery](https://dotnetmastery.com/Home/Vlog)  
+[Dotnet Mastery Blog](https://dotnetmastery.com/Blog)  
+[YouTube Channel](https://youtube.com/@DotNetMastery/videos)  
 [Learn ASP.NET Core MVC (.NET 8) - The Complete Guide](https://www.youtube.com/watch?v=AopeJjkcRvU)  
 
 
@@ -83,3 +85,41 @@ if (app.Environment.IsDevelopment())
 }
 ```
 Note that the options `  "launchUrl": "swagger"` has been added to all the _profiles_ i.e `http`, `http`, etc.
+
+
+#### Coupon API
+__AutoMapper Nuget Package__  
+The CouponAPI requires the `AutoMapper` Nuget Package.   
+Install the following Nuget Packages
+- `AutoMapper`  
+- `AutoMapper.Extensions.Microsoft.DependencyInjection` (deprecated)
+
+__Entity Framework Core__  
+Install the following Packages for Entity Framework Core:
+- `Microsoft.EntityFrameworkCore`
+- `Microsoft.EntityFrameworkCore.SqlServer`
+- `Microsoft.EntityFrameworkCore.Tools` (for migrations)
+
+__Authentication__  
+Install the `JwtBearer` package
+- `Microsoft.AspNetCore.Authentication.JwtBearer`
+
+__Install Entity Framework CLI Tool__  
+If you have not already done so, you may install the Entity Framework Dotnet CLI Tool
+```bash
+$ dotnet tool install --global dotnet-ef
+$ dotnet ef --version
+```
+
+__Migration__  
+After defining `Coupon` model, the `AppDbContext` and updating `Program.cs` to add the DbContext options to services, you can generate a migration to create the `Coupons`table
+```bash
+$ cd Mango.Services.CouponAPI
+$ dotnet ef migrations add AddCouponToDb
+```
+You generate Migrations will be found in the `Migrations`folder.
+Run the generated migration
+```bash
+$ dotnet ef database update
+```  
+Connect to you SQL Server Instance using SSMS and check to confirm if the `Coupons` table was created in the `Mango_Coupon` database.  
