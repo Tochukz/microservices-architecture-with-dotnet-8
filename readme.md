@@ -144,3 +144,24 @@ After starting the application, you can check the database table to see if it ha
 __Auto Mapper__  
 Auto Mapping has been implemented in the `MappingConfig` class file.   
 Changes was done in the `Program.cs` file to integrate the Auto Mapper into the application service container.  
+
+## Section 3: Coupon API - Crud
+__Frontend__  
+We start building the frontend of the application by adding a _ASP.NET Core Web App (MVC)_ project to the `Frontend` solution folder.    
+
+__Newtonsoft.Json__  
+The `Newtonsoft.Json` Nuget package is used to Serialize and Deserialize the request payload for API Request.  
+You need to install the Package for the Web project.    
+
+__Multiple Startup Projects__  
+When we run the application, we want the _Web_ project as well as the _CouponAPI_ project to run  at the same time. To achive this, we need to configure the solution to have multiple startup projects:
+- Right click on the solution > _Configure startup projects_
+- Select _Multiple startup projects_
+- Update all the project action to _"Start"_
+- Click _Apply_ and _Ok_.
+- Start the project to test it.
+- All the startup pages should open in a browser window for each project.
+
+__Theme and Bootstrap Icons__  
+The Web project using the [Slate](https://bootswatch.com/slate) [Bootstrap theme](https://bootswatch.com/). You can download the CSS and include it in the `wwwroot/lib/bootstrap/dist/css` folder and update the `View/Shared/_Layout.cshtml` header section to use the style.  
+For icon, we use the [BootStrap Icons](https://icons.getbootstrap.com/). The _CDN_ link to the CSS resource is also included in the head section of the `_Layout.cshtml` markup.  

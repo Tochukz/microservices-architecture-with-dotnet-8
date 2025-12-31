@@ -9,7 +9,7 @@ using Mango.Services.CouponAPI.Models.Dto;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/coupon")]
     [ApiController]
     public class CouponController : ControllerBase
     {
@@ -122,11 +122,12 @@ namespace Mango.Services.CouponAPI.Controllers
         }
 
         [HttpDelete]
-        public ResponseDto Delete(int couponId)
+        [Route("{id:int}")]
+        public ResponseDto Delete(int id)
         {
             try
             {
-                Coupon coupon = _db.Coupons.First(cp => cp.CouponId == couponId);
+                Coupon coupon = _db.Coupons.First(cp => cp.CouponId == id);
                 _db.Coupons.Remove(coupon);
                 _db.SaveChanges();
             }
