@@ -26,5 +26,19 @@ if (app.Environment.IsDevelopment())
 app.UseAuthorization();
 
 app.MapControllers();
-
+ApplyMigration();
 app.Run();
+
+
+/** Apply any pending mirations */
+void ApplyMigration()
+{
+    using (IServiceScope scope = app.Services.CreateScope())
+    {
+        AppDbContext dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        if (dbContext.Database.GetPendingMigrations().Count() > 0)
+        {
+            dbContext.Database.Migrate();
+        }
+    }
+}

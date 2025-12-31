@@ -117,9 +117,26 @@ After defining `Coupon` model, the `AppDbContext` and updating `Program.cs` to a
 $ cd Mango.Services.CouponAPI
 $ dotnet ef migrations add AddCouponToDb
 ```
-You generate Migrations will be found in the `Migrations`folder.
+Your generated migration file will be found in the `Migrations` folder, such as `Migrations/20251230021735_AddCouponToDb.cs`.    
 Run the generated migration
 ```bash
 $ dotnet ef database update
 ```  
-Connect to you SQL Server Instance using SSMS and check to confirm if the `Coupons` table was created in the `Mango_Coupon` database.  
+Connect to you SQL Server Instance using SSMS and check to confirm that the `Coupons` table was created in the `Mango_Coupon` database.  
+To undo a migratiion
+```bash
+$ dotnet ef migrations remove
+```
+__Seeding__  
+After the migration has generated the `Coupons` table, we need to seed the table.
+First, update the `AppDbContext` class by overriding the `OnModelCreating` method of the base class. In the `OnModelCreating` method, the data to see the `Coupons` table will be implemented.  
+After that, a new migration must be generate.
+```bash
+$ dotnet ef migrations add SedCouponTable
+```
+This will generate a migration file such as `Migrations/20251231090838_SedCouponTable.cs`.  
+
+__Auto Migration__  
+The `Program` file has been updated with the `ApplyMigration` method.  
+This method is executed each time the application starts and it check for pending migrations a run migrations if any exists.  
+After starting the application, you can check the database table to see if it has been seeded.  
