@@ -140,3 +140,7 @@ __Auto Migration__
 The `Program` file has been updated with the `ApplyMigration` method.  
 This method is executed each time the application starts and it check for pending migrations a run migrations if any exists.  
 After starting the application, you can check the database table to see if it has been seeded.  
+
+__Auto Mapper__  
+Auto Mapping has been implemented in the `MappingConfig` class file.   
+Changes was done in the `Program.cs` file to integrate the Auto Mapper into the application service container.  
