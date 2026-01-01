@@ -165,3 +165,55 @@ When we run the application, we want the _Web_ project as well as the _CouponAPI
 __Theme and Bootstrap Icons__  
 The Web project using the [Slate](https://bootswatch.com/slate) [Bootstrap theme](https://bootswatch.com/). You can download the CSS and include it in the `wwwroot/lib/bootstrap/dist/css` folder and update the `View/Shared/_Layout.cshtml` header section to use the style.  
 For icon, we use the [BootStrap Icons](https://icons.getbootstrap.com/). The _CDN_ link to the CSS resource is also included in the head section of the `_Layout.cshtml` markup.  
+
+__Toaster__  
+We use the _toastr_ library to implement notification.  
+The [CDN links](https://cdnjs.com/libraries/toastr.js) are included in a newly created `_Notification` partial which is the included in the _Layout_ shared view.  
+The _Layout_ head section is also updated with the _toastr_ CSS library.  
+
+## Section 4: Auth API
+For the Auth API we add a new _ASP.Net Core Web API_ project named `Mango.Services.AuthAPI` to the `Services` solution folder.
+
+__Dependencies__  
+First, we copy all the dependencies from the `ItemGroup` section of the `CouponAPI`  project file (`.csproj` file)  to the  `AuthAPI` project file. This serves as the base dependencies.  
+Next we install the Dotnet Identity package
+- `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
+
+The Dotnet Identity package automatically creates all the identity related tables it needs using Entity Framework Core so it needs the `DbContext` to be implemented or it's use.
+
+__Identity Setup__  
+- First you need  to install the dependency `Microsoft.AspNetCore.Identity.EntityFrameworkCore`
+- Next, you create `DbContext` class such as `Data/AppDbContext.cs`
+- Update the request pipeline by including Identity services in `Program.cs`
+```cs
+builder.Services.AddDbContext<AppDbContext>(option =>
+{
+    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>()
+                .AddDefaultTokenProviders();
+...
+app.UseHttpsRedirection();
+app.UseAuthentication(); //Authentication must come before Authorization
+app.UseAuthorization();
+app.MapControllers();
+ApplyMigration();
+```
+- Now you can run migration to generate the required Identity tables
+```bash
+$ cd Mango.Services.AuthAPI
+$ dotnet ef migrations add addIdentityTables
+```
+This will generate the `Migrations/20260101104000_addIdentityTables.cs` which contains the code that create a bunch of tabled needed by  Dotnet Identity.
+- Finally, we run the pending migration
+```bash
+$ cd Mango.Services.AuthAPI
+$ dotnet ef database update
+```
+Check the `Mongo_Auth` database and you should see a couple of tables created by Dotnet Identity.  
+
+__Extending the AspNetUsers table__
+One of the tables created by Dotnet Identity is `AspNetUsers` which contain some fields for user information such as `Username` and `Email`.  We may want to extend this table by adding more fields to hold more user information.  
+To do this, we must create a Models that extend the `IdentityUser` mode. See `Models/ApplicationUser.cs` for implementation.  
+In the implementation, every place where `IdentityUser` is used must be replace with the `ApplicationUser`. This included the `Program.cs` and `Data/AppDbContext`.     
