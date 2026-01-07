@@ -4,6 +4,10 @@ using Mango.Web.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Mango.Web.Controllers
 {
@@ -27,19 +31,20 @@ namespace Mango.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(LoginReqDto loginDto)
+        public async Task<IActionResult> Login(LoginReqDto loginReqDto)
         {
-            ResponseDto response = await _authService.LoginAsync(loginDto);
-            if (response != null && response.IsSuccess)
+            ResponseDto loginApiResp = await _authService.LoginAsync(loginReqDto);
+            if (loginApiResp != null && loginApiResp.IsSuccess)
             {
-                LoginResDto loginResDto = JsonConvert.DeserializeObject<LoginResDto>(Convert.ToString(response.Result));
+                LoginResDto loginResDto = JsonConvert.DeserializeObject<LoginResDto>(Convert.ToString(loginApiResp.Result));
+                await SignInUser(loginResDto);
                 _tokenProvider.SetToken(loginResDto.Token);
                 return RedirectToAction("Index", "Home");  
             }
             else
             {
-                ModelState.AddModelError("CustomError", response.Message);
-                return View(loginDto);
+                TempData["error"] = loginApiResp.Message;
+                return View(loginReqDto);
             }
         }
 
@@ -77,6 +82,10 @@ namespace Mango.Web.Controllers
                 }
                     
             }
+            else
+            {
+                TempData["error"] = response.Message;
+            }
 
             List<SelectListItem> roles = new()
             {
@@ -87,9 +96,28 @@ namespace Mango.Web.Controllers
             return View(regDto);
         }
 
-        public IActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            return View();
+            await HttpContext.SignOutAsync();
+            _tokenProvider.ClearToken();
+            return RedirectToAction("Index", "Home");
+        }
+
+        /** SignIn a user using Dotnet Identity  */
+        private async Task SignInUser(LoginResDto loginRes)
+        {
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            JwtSecurityToken jwtSecToken = tokenHandler.ReadJwtToken(loginRes.Token);
+            ClaimsIdentity identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwtSecToken.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwtSecToken.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwtSecToken.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+
+            identity.AddClaim(new Claim(ClaimTypes.Name, jwtSecToken.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Role, jwtSecToken.Claims.FirstOrDefault(u => u.Type == "role").Value));
+
+            ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }

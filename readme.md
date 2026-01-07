@@ -10,6 +10,18 @@
 [YouTube Channel](https://youtube.com/@DotNetMastery/videos)  
 [Learn ASP.NET Core MVC (.NET 8) - The Complete Guide](https://www.youtube.com/watch?v=AopeJjkcRvU)  
 
+### Running the example code
+To run the [GitHub Example Code](https://github.com/bhrugen/Mango_Microservices) you may need to install the target dotnet framework version on your machine if you don't already have it.  
+1. Check the Target Framework Version
+- Right click on any of the Project > _Edit Project File_
+- Check the `TargetFramework` version in the `csroj` file.
+2. Check if you have the Dotnet Framework version installed
+```bash
+$ dotnet --list-sdks
+```
+3. Download and install the Dotnet Framework version if needed.  
+- Go to [Download .NET](https://dotnet.microsoft.com/en-us/download/dotnet) and download _.Net 8.0_
+- Run the downloaded executable to install the SDK version. 
 
 ## Section 1: Introduction
 __Why Microservices__  
@@ -216,4 +228,13 @@ Check the `Mongo_Auth` database and you should see a couple of tables created by
 __Extending the AspNetUsers table__
 One of the tables created by Dotnet Identity is `AspNetUsers` which contain some fields for user information such as `Username` and `Email`.  We may want to extend this table by adding more fields to hold more user information.  
 To do this, we must create a Models that extend the `IdentityUser` mode. See `Models/ApplicationUser.cs` for implementation.  
-In the implementation, every place where `IdentityUser` is used must be replace with the `ApplicationUser`. This included the `Program.cs` and `Data/AppDbContext`.     
+In the implementation, every place where `IdentityUser` is used must be replace with the `ApplicationUser`. This included the `Program.cs` and `Data/AppDbContext`.  
+After the `Models/ApplicationUser.cs` is created and `Program.cs` and `Data/AppDbContext.cs` has been update, you can create a migration
+```
+$ dotnet ef migrations add AddNameToAspNetUsers
+```
+
+## Section 5: Consuming Auth API
+__Signing in a user in .NET Identity__  
+For the implementation we need to install the Nuget package:
+- System.IdentityModel.Tokens.Jwt
