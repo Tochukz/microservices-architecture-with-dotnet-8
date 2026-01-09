@@ -21,7 +21,7 @@ $ dotnet --list-sdks
 ```
 3. Download and install the Dotnet Framework version if needed.  
 - Go to [Download .NET](https://dotnet.microsoft.com/en-us/download/dotnet) and download _.Net 8.0_
-- Run the downloaded executable to install the SDK version. 
+- Run the downloaded executable to install the SDK version.
 
 ## Section 1: Introduction
 __Why Microservices__  
@@ -127,11 +127,13 @@ __Migration__
 After defining `Coupon` model, the `AppDbContext` and updating `Program.cs` to add the DbContext options to services, you can generate a migration to create the `Coupons`table
 ```bash
 $ cd Mango.Services.CouponAPI
+# Generate Mimration from Models
 $ dotnet ef migrations add AddCouponToDb
 ```
 Your generated migration file will be found in the `Migrations` folder, such as `Migrations/20251230021735_AddCouponToDb.cs`.    
 Run the generated migration
 ```bash
+# Run outstanding migrations
 $ dotnet ef database update
 ```  
 Connect to you SQL Server Instance using SSMS and check to confirm that the `Coupons` table was created in the `Mango_Coupon` database.  
@@ -238,3 +240,14 @@ $ dotnet ef migrations add AddNameToAspNetUsers
 __Signing in a user in .NET Identity__  
 For the implementation we need to install the Nuget package:
 - System.IdentityModel.Tokens.Jwt
+
+## Section 6: Product API
+Generate migration
+```bash
+$ dotnet ef migrations add AddProductsToDb
+```
+
+Run all outstanding migrations
+```bash
+$ dotnet ef database update
+```

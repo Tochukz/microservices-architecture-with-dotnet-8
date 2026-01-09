@@ -1,19 +1,18 @@
-﻿using AutoMapper;
-using Mango.Services.CouponAPI;
-using Mango.Services.CouponAPI.Data;
+using AutoMapper;
+using Mango.Services.ProductAPI;
+
+using Mango.Services.ProductAPI.Data;
+using Mango.Services.ProductAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi;
-using Mango.Services.CouponAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddDbContext<AppDbContext>(option =>
+builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
@@ -22,6 +21,7 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+//builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen(options =>
 {
     options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
@@ -51,13 +51,14 @@ if (app.Environment.IsDevelopment())
 
     app.UseHttpsRedirection();
 }
+
+
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-ApplyMigration();
+// ApplyMigration();
 app.Run();
-
 
 /** Apply any pending mirations */
 void ApplyMigration()
