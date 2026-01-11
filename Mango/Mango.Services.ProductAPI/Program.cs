@@ -57,7 +57,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
-// ApplyMigration();
+ApplyMigration();
 app.Run();
 
 /** Apply any pending mirations */

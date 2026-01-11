@@ -11,14 +11,17 @@ builder.Services.AddHttpContextAccessor(); // Registers IHttpContextAccessor in 
 builder.Services.AddHttpClient(); //Registers the HttpClientFactory in the DI container so that you can have IHttpClientFactory or HttpClient in your class constructor 
 builder.Services.AddHttpClient<ICouponService, CouponService>(); // Registers a typed HttpClient. A dedicated HttpClient instance is injected into CouponService. That HttpClient is managed by HttpClientFactory
 builder.Services.AddHttpClient<IAuthService, AuthService>();
+builder.Services.AddHttpClient<IProductService, ProductService>();
 
 StyleDetails.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
 StyleDetails.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
+StyleDetails.ProductAPIBase =  builder.Configuration["ServiceUrls:ProductAPI"];
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
