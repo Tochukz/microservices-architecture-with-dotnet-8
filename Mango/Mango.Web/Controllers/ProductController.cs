@@ -54,7 +54,7 @@ namespace Mango.Web.Controllers
             return View(productDto);
         }
 
-        public async Task<IActionResult> ProductUpdate(int productId)
+        public async Task<IActionResult> ProductEdit(int productId)
         {
             ResponseDto? response = await _productService.GetProductAsync(productId);
             if (response != null && response.IsSuccess)
@@ -82,7 +82,7 @@ namespace Mango.Web.Controllers
             {
                 TempData["error"] = response?.Message;
             }
-            return RedirectToAction(nameof(ProductUpdate), new {productId = productDto.ProductId}); 
+            return RedirectToAction(nameof(ProductEdit), new {productId = productDto.ProductId}); 
         }
 
         public async Task<IActionResult> ProductDelete(int productId)
@@ -113,8 +113,7 @@ namespace Mango.Web.Controllers
             {
                 TempData["error"] = response?.Message;
             }
-                
-            return View(productDto);
+            return RedirectToAction(nameof(ProductDelete), new { productId = productDto.ProductId });
         }
     }
 }

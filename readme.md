@@ -244,7 +244,22 @@ For the implementation we need to install the Nuget package:
 ## Section 6: Product API
 Generate migration
 ```bash
+$ cd Mango.Services.ProductAPI
 $ dotnet ef migrations add AddProductsToDb
+```
+
+Run all outstanding migrations
+```bash
+$ dotnet ef database update
+```
+
+## Section 7: Hone Page and Details
+
+## Section 8: Shopping Cart
+Generate migration
+```bash
+$ cd Mango.Services.ShoppingCartAPI
+$ dotnet ef  migrations add AddShoppingCartTables
 ```
 
 Run all outstanding migrations
