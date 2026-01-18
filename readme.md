@@ -266,3 +266,5 @@ Run all outstanding migrations
 ```bash
 $ dotnet ef database update
 ```
+
+# Section 9: Shopping Cart in Web Project
