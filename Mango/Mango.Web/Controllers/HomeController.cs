@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Data;
 using System.Diagnostics;
-using System.IdentityModel.Tokens.Jwt;
+using IdentityModel;
 
 namespace Mango.Web.Controllers
 {
