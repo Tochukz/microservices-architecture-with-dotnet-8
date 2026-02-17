@@ -278,6 +278,8 @@ The Standard SKU supports Queues and Topics.
 ### Class Library
 __Mango.MessageBus Class Library__  
 We create a `Mango.MessageBus` _class library_ project under the `integration` folder.  
+
+__Dependencies__  
 Nuget package dependencies:
 * `Azure.Messaging.ServiceBus`
 * `NewtonSoft.Json`
@@ -296,12 +298,19 @@ If you check the `.csproj` file of the project, you should see a new `ItemGroup`
 ```
 
 ## Section 11: Email API - Service Bus Receiver
-Generate the migration
+We added the `Mango.Services.EmailAPI`  Web API Project.  
+
+Generating the migration:
 ```bash
-$ cd Mango.MessageBus
+$ cd Mango.Services.EmailAPI
 $ dotnet ef migrations add AddEmailLogTable
 ```
-Run the migration
+Run the migration:
 ```bash
 $ dotnet ef database update
 ```
+
+__Dependencies__  
+Nuget package dependencies:
+* `Azure.Messaging.ServiceBus`
+* `NewtonSoft.Json`
