@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.Json.Serialization;
 using Azure.Messaging.ServiceBus;
-using NewtonSoft.Json;
+using Newtonsoft.Json;
 
 namespace Mango.MessageBus
 {
@@ -16,7 +16,7 @@ namespace Mango.MessageBus
         {
             await using ServiceBusClient client = new ServiceBusClient(connectionString);
             ServiceBusSender sender = client.CreateSender(topicOrQueueName);
-            string jsonMessage = JsonConverter.SerializeObject(message);
+            string jsonMessage = JsonConvert.SerializeObject(message);
             ServiceBusMessage finalMessage = new ServiceBusMessage(Encoding.UTF8.GetBytes(jsonMessage))
             {
                 CorrelationId = Guid.NewGuid().ToString(),
