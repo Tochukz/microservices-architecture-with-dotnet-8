@@ -227,7 +227,7 @@ $ dotnet ef database update
 ```
 Check the `Mongo_Auth` database and you should see a couple of tables created by Dotnet Identity.  
 
-__Extending the AspNetUsers table__
+__Extending the AspNetUsers table__  
 One of the tables created by Dotnet Identity is `AspNetUsers` which contain some fields for user information such as `Username` and `Email`.  We may want to extend this table by adding more fields to hold more user information.  
 To do this, we must create a Models that extend the `IdentityUser` mode. See `Models/ApplicationUser.cs` for implementation.  
 In the implementation, every place where `IdentityUser` is used must be replace with the `ApplicationUser`. This included the `Program.cs` and `Data/AppDbContext`.  
@@ -268,3 +268,40 @@ $ dotnet ef database update
 ```
 
 # Section 9: Shopping Cart in Web Project
+
+# Section 10: Service Bus
+### Service Bus
+__Azure Service Bus__  
+We use the Azure Service Bus with Standard SKU for the microservice asynchronous service communication.  
+The Standard SKU supports Queues and Topics.  
+
+### Class Library
+__Mango.MessageBus Class Library__  
+We create a `Mango.MessageBus` _class library_ project under the `integration` folder.  
+Nuget package dependencies:
+* `Azure.Messaging.ServiceBus`
+* `NewtonSoft.Json`
+
+__Adding project reference__  
+To use the `Mango.MessageBus` _class library_ in any of the service project, you will need to add a _project reference_ of the class library to the service library.   
+To do this using dotnet CLI  
+```bash
+> dotnet add  Mango.Services.ShoppingCartAPI reference Mango.MessageBus
+```
+If you check the `.csproj` file of the project, you should see a new `ItemGroup` element
+```xml
+<ItemGroup>
+  <ProjectReference Include="..\Mango.MessageBus\Mango.MessageBus.csproj" />
+</ItemGroup>
+```
+
+## Section 11: Email API - Service Bus Receiver
+Generate the migration
+```bash
+$ cd Mango.MessageBus
+$ dotnet ef migrations add AddEmailLogTable
+```
+Run the migration
+```bash
+$ dotnet ef database update
+```
