@@ -9,11 +9,10 @@ namespace Mango.MessageBus
 {
     public class MessageBus : IMessageBus
     {
-        //Primary Connection String
-        private string connectionString = "Endpoint=sb://mangoeb.servicebus.windows.net';.....";
-
+      
         public async Task PublishMessage(object message, string topicOrQueueName)
         {
+            string? connectionString = Environment.GetEnvironmentVariable("SERVICE_BUS_CONNECTION_STRING");
             await using ServiceBusClient client = new ServiceBusClient(connectionString);
             ServiceBusSender sender = client.CreateSender(topicOrQueueName);
             string jsonMessage = JsonConvert.SerializeObject(message);

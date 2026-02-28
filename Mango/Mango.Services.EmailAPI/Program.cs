@@ -1,9 +1,12 @@
-using Microsoft.EntityFrameworkCore;
+using DotNetEnv;
 using Mango.Services.EmailAPI.Data;
-using Mango.Services.EmailAPI.Messaging;
 using Mango.Services.EmailAPI.Extension;
+using Mango.Services.EmailAPI.Messaging;
 using Mango.Services.EmailAPI.Services;
+using Microsoft.Azure.Amqp.Framing;
+using Microsoft.EntityFrameworkCore;
 
+Env.Load();   // Loads .env into environment variables
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -12,7 +15,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-/**We cannot inject a scoped service suc the the Db Context into  Singleton Implementation like the AzureServiceBusConsumer */
+/** We cannot inject a scoped service such as the Db Context into a Singleton Implementation like the AzureServiceBusConsumer */
+/** So we do this instead */
 var optionBuilder = new DbContextOptionsBuilder<AppDbContext>();
 optionBuilder.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 builder.Services.AddSingleton(new EmailService(optionBuilder.Options));

@@ -1,4 +1,5 @@
 using AutoMapper;
+using DotNetEnv;
 using Mango.MessageBus;
 using Mango.Services.ShoppingCartAPI;
 
@@ -10,6 +11,8 @@ using Mango.Services.ShoppingCartAPI.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
+
+Env.Load();   // Loads .env into environment variables
 
 var builder = WebApplication.CreateBuilder(args);
 
