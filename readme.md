@@ -314,3 +314,14 @@ __Dependencies__
 Nuget package dependencies:
 * `Azure.Messaging.ServiceBus`
 * `NewtonSoft.Json`
+
+## Section 12: Checkout UI and Order API  
+Generate the migration
+```bash
+$ cd Mango.Services.OrderAPI
+$ dotnet ef migrations add AddOrderTables
+```
+Run the generated migration
+```bash
+$ dotnet ef database update
+```
