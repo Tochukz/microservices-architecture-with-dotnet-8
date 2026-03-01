@@ -1,10 +1,14 @@
-using Microsoft.EntityFrameworkCore;
-using Mango.Services.AuthAPI.Models;
+using DotNetEnv;
+using Mango.MessageBus;
 using Mango.Services.AuthAPI.Data;
-using Microsoft.AspNetCore.Identity;
+using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Service;
 using Mango.Services.AuthAPI.Service.IService;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Azure.Amqp.Framing;
+using Microsoft.EntityFrameworkCore;
 
+Env.Load();   // Loads .env into environment variables
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -21,6 +25,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
 builder.Services.AddControllers();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IMessageBus, MessageBus>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddSwaggerGen();
 

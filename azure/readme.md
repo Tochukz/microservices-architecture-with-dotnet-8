@@ -54,3 +54,7 @@ To reveal these outputs, use the `-raw` flag
 > terraform output -raw servicebus_namespace_connection_string
 > terraform output -raw queue_connection_string
 ```
+
+__Usage__  
+* Copy the `servicebus_namespace_connection_string` output value to be used for the `SERVICE_BUS_CONNECTION_STRING` in your `.env` file.  for the `Mango.Services.EmailAPI` and `Mango.Services.ShoppingCartAPI` projects.   
+* Copy the queue name `emailshoppingcart` and `registration` too use in `appsettings.json` file.  

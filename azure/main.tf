@@ -31,6 +31,17 @@ resource "azurerm_servicebus_queue" "cart_queue" {
   lock_duration = "PT1M" # 1 minute
 }
 
+resource "azurerm_servicebus_queue" "registration_queue" {
+  name         = "Registration"
+  namespace_id = azurerm_servicebus_namespace.simple_bus.id
+
+  # enable_partitioning = true
+  max_size_in_megabytes = 1024
+  max_delivery_count = 5 
+  default_message_ttl = "P14D" # 14 days 
+  lock_duration = "PT1M" # 1 minute
+}
+
 # resource "azurerm_servicebus_topic" "topic" {
 #   name         = "MangoTopic"
 #   namespace_id = azurerm_servicebus_namespace.simple_group.id

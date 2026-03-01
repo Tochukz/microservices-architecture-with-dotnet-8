@@ -2,6 +2,7 @@
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Mango.MessageBus;
 
 namespace Mango.Services.AuthAPI.Controllers
 {
@@ -10,12 +11,16 @@ namespace Mango.Services.AuthAPI.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        protected ResponseDto _response; 
+        protected ResponseDto _response;
+        private readonly IMessageBus _messageBus;
+        private IConfiguration _configuration;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IConfiguration configuration, IMessageBus messageBus)
         {
             _authService = authService;
             _response = new();
+            _configuration = configuration;
+            _messageBus = messageBus;
         }
 
         [HttpPost("register")]
@@ -28,6 +33,8 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = errorMessage;
                 return BadRequest(_response);
             }
+            string registrationQueue = _configuration.GetValue<string>("TopicAndQueueNames:RegistrationQueue") ?? "";
+            await _messageBus.PublishMessage(registrationReqDto, registrationQueue);
             return Ok(_response);
         }
 

@@ -3,6 +3,7 @@ using Mango.Services.EmailAPI.Models.Dto;
 using Mango.Services.EmailAPI.Data;
 using System.Text;
 using Mango.Services.EmailAPI.Models;
+using Mango.Services.AuthAPI.Models.Dto;
 
 namespace Mango.Services.EmailAPI.Services
 {
@@ -31,6 +32,15 @@ namespace Mango.Services.EmailAPI.Services
             message.Append("</ul>");
 
             await LogAndEmail(message.ToString(), cartDto.CartHeader.Email);
+        }
+
+        public async Task EmailRegistrationAndLog(RegistrationReqDto registrationReqDto)
+        {
+            StringBuilder message = new StringBuilder();
+            message.AppendLine("<br /> Registration Email Request ");
+            message.AppendLine("<br /> Email " + registrationReqDto.Email);
+           
+            await LogAndEmail(message.ToString(), "dotnetmastery@gmail.com");
         }
 
         private async Task<bool> LogAndEmail(string message, string email)
