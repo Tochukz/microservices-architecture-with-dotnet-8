@@ -25,5 +25,6 @@ namespace Mango.Services.OrderAPI
 
             return mapperConfig;
         }
+
     }
 }
